@@ -1,0 +1,44 @@
+{
+  "name": "graphql-sql-sample",
+  "author": "Nguyen Ly (lyphtec [at] gmail [dot] com)",
+  "description": "Sample GraphQL app with SQL backend",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lyphtec/graphql-sql-sample"
+  },
+  "keywords": [
+    "graphql"
+  ],
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=7.0.0"
+  },
+  "scripts": {
+    "start": "babel-node src/index.js",
+    "build": "babel src -d dist",
+    "serve": "node dist/index.js",
+    "webpack": "webpack",
+    "test": "mocha --compilers js:babel-register"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.24.1",
+    "mocha": "^3.5.0",
+    "webpack": "^3.4.1"
+  },
+  "dependencies": {
+    "express": "^4.15.4",
+    "express-graphql": "^0.6.7",
+    "faker": "^4.1.0",
+    "graphql": "^0.10.5",
+    "lodash": "^4.17.4",
+    "sequelize": "^4.4.2",
+    "sqlite3": "^3.1.9"
+  }
+}
