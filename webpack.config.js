@@ -1,16 +1,5 @@
 const path = require('path');
-const fs = require('fs');
-
-// from https://gist.github.com/icebob/a37de30311fbfd770eaf5027bf779f5c
-const nodeModules = {};
-fs.readdirSync('node_modules')
-    .filter( (x) => {
-        return ['.bin'].indexOf(x) === -1;
-    })
-    .forEach( (mod) => {
-        nodeModules[mod] = 'commonjs ' + mod;
-    });
-
+const nodeExternals = require('webpack-node-externals');  // see example https://github.com/js-accounts/graphql/blob/master/packages/graphql-api/webpack.config.js
 
 module.exports = {
     entry: './src/index.js',
@@ -19,12 +8,12 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.js'
     },
-    externals: nodeModules,
+    externals: [nodeExternals()],
     module: {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
