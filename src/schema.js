@@ -1,142 +1,65 @@
-import {
-    GraphQLObjectType,
-    GraphQLString,
-    GraphQLInt,
-    GraphQLSchema,
-    GraphQLList,
-    GraphQLNonNull
-} from 'graphql';
-
+import { makeExecutableSchema } from 'graphql-tools';
 import Db from './db';
 
-const Post = new GraphQLObjectType({
-    name: 'Post',
-    description: 'Blog post',
-    fields () {
-        return {
-            title: {
-                type: GraphQLString,
-                resolve (post) {
-                    return post.title;
-                }
-            },
-            content: {
-                type: GraphQLString,
-                resolve (post) {
-                    return post.content;
-                }
-            },
-            person: {
-                type: Person,
-                resolve (post) {
-                    return post.getPerson();
-                }
-            }
-        }
+const typeDefs = `
+    # Blog post
+    type Post {
+        id: Int!
+        title: String
+        content: String
+        person: Person
     }
-});
 
-const Person = new GraphQLObjectType({
-    name: 'Person',
-    description: 'This represents a Person',
-    fields () {
-        return {
-            id: {
-                type: GraphQLInt,
-                resolve (person) {
-                    return person.id;
-                }
-            },
-            firstName: {
-                type: GraphQLString,
-                resolve (person) {
-                    return person.firstName;
-                }
-            },
-            lastName: {
-                type: GraphQLString,
-                resolve (person) {
-                    return person.lastName;
-                }
-            },
-            email: {
-                type: GraphQLString,
-                resolve (person) {
-                    return person.email;
-                }
-            },
-            posts: {
-                type: new GraphQLList(Post),
-                resolve (person) {
-                    return person.getPosts();
-                }
-            }
-        }
+    # Represents a person
+    type Person {
+        id: Int!
+        firstName: String
+        lastName: String
+        email: String
+        posts: [Post]
     }
-});
 
-const Query = new GraphQLObjectType({
-    name: 'Query',
-    description: 'Root query object',
-    fields () {
-        return {
-            people: {
-                type: new GraphQLList(Person),
-                args: {
-                    id: {
-                        type: GraphQLInt
-                    },
-                    email: {
-                        type: GraphQLString
-                    }
-                },
-                resolve (root, args) {
-                    return Db.models.person.findAll({ where: args });
-                }
-            },
-            posts: {
-                type: new GraphQLList(Post),
-                resolve (root, args) {
-                    return Db.models.post.findAll({ where: args });
-                }
-            }
-        }
+    # Root query object
+    type Query {
+       people(id: Int, email: String): [Person]
+       posts: [Post]
     }
-});
 
-const Mutation = new GraphQLObjectType({
-    name: 'Mutations',
-    description: 'Functions to set stuff',
-    fields () {
-        return {
-            addPerson: {
-                type: Person,
-                args: {
-                    firstName: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    lastName: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    email: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    }
-                },
-                resolve (source, args) {
-                    return Db.models.person.create({
-                        firstName: args.firstName,
-                        lastName: args.lastName,
-                        email: args.email.toLowerCase()
-                    });
-                }
-            }
-        }
+    # Mutations
+    type Mutation {
+        addPerson (
+            firstName: String!
+            lastName: String!
+            email: String!
+        ): Person
     }
+`;
+
+const resolvers = {
+    Query: {
+        people: (_, args) => Db.models.person.findAll({ where: args }),
+        posts: (_, args) => Db.models.post.findAll({ where: args })
+    },
+    Mutation: {
+        addPerson: (_, { firstName, lastName, email }) => {
+            return Db.models.person.create({
+                firstName,
+                lastName,
+                email: email.toLowerCase()
+            });
+        }
+    },
+    Post: {
+        person: (post) => post.getPerson()
+    },
+    Person: {
+        posts: (person) => person.getPosts()
+    }
+};
+
+const schema = makeExecutableSchema({
+    typeDefs,
+    resolvers
 });
 
-const Schema = new GraphQLSchema({
-    query: Query,
-    mutation: Mutation
-});
-
-export default Schema;
+export default schema;

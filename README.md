@@ -3,9 +3,10 @@
 Concepts covered:
 
 * Using ES6+ with Node + webpack + babel (via [babel-loader](https://webpack.js.org/loaders/babel-loader/)) - with concepts from [here](https://github.com/babel/example-node-server)
-* GraphQL + backend DB as per [https://github.com/leebenson/graphql-with-sequelize](https://github.com/leebenson/graphql-with-sequelize) / this [Youtube tut](https://www.youtube.com/watch?v=DNPVqK_woRQ)
+* GraphQL + backend DB sample as per [https://github.com/leebenson/graphql-with-sequelize](https://github.com/leebenson/graphql-with-sequelize) / this [Youtube tut](https://www.youtube.com/watch?v=DNPVqK_woRQ)
 * [Sequelize](http://docs.sequelizejs.com/) - the SQL ORM for Node
 * Using webpack for backend - sample [config](https://github.com/js-accounts/graphql/blob/master/packages/graphql-api/webpack.config.js)
+* Apollo framework: [graphql-tools](http://dev.apollodata.com/tools/graphql-tools/index.html) & [apollo-server-express](http://dev.apollodata.com/tools/apollo-server/index.html)
 
 ## Development mode:
 
