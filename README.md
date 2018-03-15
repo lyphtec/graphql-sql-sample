@@ -1,4 +1,4 @@
-# Sample project exploring [GraphQL](graphql.org) + SQL backend
+# Sample project exploring [GraphQL](http://graphql.org/) + SQL backend
 
 Concepts covered:
 
